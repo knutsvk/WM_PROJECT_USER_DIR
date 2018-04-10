@@ -1,0 +1,7 @@
+# tilde files and swap files
+*~
+*.swp
+*.swo
+
+*linux64GccDPInt32Opt*
+*lnInclude*

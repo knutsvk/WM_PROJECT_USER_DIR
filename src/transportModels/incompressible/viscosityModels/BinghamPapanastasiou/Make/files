@@ -1,0 +1,3 @@
+BinghamPapanastasiou.C
+
+LIB = $(FOAM_USER_LIBBIN)/libBinghamPapanastasiou
