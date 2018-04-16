@@ -20,8 +20,8 @@ phases (fluid1 fluid2);
 fluid1
 {
 	transportModel  Newtonian;
-	nu              1e-06;
-	rho 			1000;
+	nu              1e-05;
+	rho 			2000;
 }
 
 fluid2
