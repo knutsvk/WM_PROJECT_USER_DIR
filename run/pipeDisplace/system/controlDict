@@ -51,4 +51,9 @@ maxCo 			1;
 maxAlphaCo 		1;
 maxDeltaT 		0.1;
 
+libs
+	(
+		"libBinghamPapanastasiou.so"
+	);
+
 // ************************************************************************* //

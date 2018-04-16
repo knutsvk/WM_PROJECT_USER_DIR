@@ -19,9 +19,11 @@ phases (fluid1 fluid2);
 
 fluid1
 {
-	transportModel  Newtonian;
-	nu              1e-05;
-	rho 			2000;
+	transportModel  BinghamPapanastasiou;
+	eps             0.0025;
+	tau0			1.0;
+	k   			0.1;
+	rho 			1000;
 }
 
 fluid2
