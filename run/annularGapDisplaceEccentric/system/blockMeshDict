@@ -1,0 +1,135 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5                                     |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+vertices #codeStream
+{
+    codeInclude
+    #{
+        #include "pointField.H"
+    #};
+
+    code
+    #{
+        pointField points(8);
+        points[0]  = point( 0.022225,  0.0000,  0);
+        points[1]  = point( 0.0254,    0.0000,  0);
+        points[2]  = point( 0.0000,    0.0254,  0);
+        points[3]  = point( 0.009525,  0.0127,  0);
+        points[4]  = point(-0.003175,  0.0000,  0);
+        points[5]  = point(-0.0254,    0.0000,  0);
+        points[6]  = point( 0.0000,   -0.0254,  0);
+        points[7]  = point( 0.009525, -0.0127,  0);
+
+        // Duplicate z points
+        label sz = points.size();
+        points.setSize(2*sz);
+        for (label i = 0; i < sz; i++)
+        {
+            const point& pt = points[i];
+            points[i+sz] = point(pt.x(), pt.y(), 0.5);
+        }
+
+        os  << points;
+    #};
+};
+
+
+blocks
+(
+	hex (0 1 2 3 8  9  10 11) (15 15 400) simpleGrading (1 1 1) // 0
+	hex (3 2 5 4 11 10 13 12) (15 15 400) simpleGrading (1 1 1) // 1
+	hex (4 5 6 7 12 13 14 15) (15 15 400) simpleGrading (1 1 1) // 2
+	hex (7 6 1 0 15 14 9  8)  (15 15 400) simpleGrading (1 1 1) // 3
+);
+
+edges
+(
+    arc 0  3  ( 0.018505  0.00898 0.0)
+    arc 3  4  ( 0.000545  0.00898 0.0)
+    arc 4  7  ( 0.000545 -0.00898 0.0)
+    arc 7  0  ( 0.018505 -0.00898 0.0)
+
+    arc 8  11 ( 0.018505  0.00898 0.5)
+    arc 11 12 ( 0.000545  0.00898 0.5)
+    arc 12 15 ( 0.000545 -0.00898 0.5)
+    arc 15 8  ( 0.018505 -0.00898 0.5)
+
+	arc 1  2  ( 0.01796  0.01796 0.0)
+	arc 2  5  (-0.01796  0.01796 0.0)
+	arc 5  6  (-0.01796 -0.01796 0.0)
+	arc 6  1  ( 0.01796 -0.01796 0.0)
+
+	arc 9  10 ( 0.01796  0.01796 0.5)
+	arc 10 13 (-0.01796  0.01796 0.5)
+	arc 13 14 (-0.01796 -0.01796 0.5)
+	arc 14 9  ( 0.01796 -0.01796 0.5)
+);
+
+boundary
+(
+    bottom
+    {
+        type patch;
+        faces
+        (
+            (0  1  2  3)
+            (3  2  5  4)
+            (4  5  6  7)
+            (7  6  1  0)
+        );
+    }
+    top
+    {
+        type patch;
+        faces
+        (
+            (9  8  11 10)
+			(10 11 12 13)
+			(13 12 15 14)
+			(14 15 8  9 )
+        );
+    }
+    inner
+    {
+        type wall;
+        faces
+        (
+			(11 3  0  8)
+			(3  11 12 4)
+			(4  12 15 7)
+			(8  0  7 15)
+        );
+    }
+    outer
+    {
+        type wall;
+        faces
+        (
+			(10 2  1  9)
+			(2  10 13 5)
+			(5  13 14 6)
+			(9  1  6 14)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
